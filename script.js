@@ -2,19 +2,17 @@ const img = document.querySelector("img");
 const searchTerm = document.getElementById("search");
 const searchButton = document.getElementById("searchBtn");
 
-searchButton.addEventListener("click", () => {
-  fetch(
-    `https://api.giphy.com/v1/gifs/translate?api_key=EgaopUnqXyuyq1n4ENNvKO9fejnLjR33&s=${searchTerm.value}`,
+async function getGif(query) {
+  const response = await fetch(
+    `https://api.giphy.com/v1/gifs/translate?api_key=EgaopUnqXyuyq1n4ENNvKO9fejnLjR33&s=${query}`,
     { mode: "cors" }
-  )
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (response) {
-      img.src = response.data.images.original.url;
-    })
-    .catch((error) => {
-        console.log(error);
-        img.src = "default.jpg"
-    });
+  );
+  const gifData = await response.json();
+  img.src = gifData.data.images.original.url;
+}
+
+searchButton.addEventListener("click", () => {
+  getGif(searchTerm.value);
 });
+
+getGif("cats");
